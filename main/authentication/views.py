@@ -12,10 +12,10 @@ def register(request,):
     username = request.data.get('username')
     password = request.data.get('password')
     if User.objects.filter(username=username).exists():
-        print(username)
         return Response("Username allready exists!")
     else:
         new_user = User.objects.create(username=username, password=make_password(password))
+        print(password)
         return Response("You have created a new account!")
     
 @api_view(['POST'])
@@ -26,7 +26,7 @@ def login_view(request):
     if user is not None:
         login(request, user)
         print(password)
-        return Response("Hello, {username} you have loged into your account!")
+        return Response(f'Hello, {username} you have loged into your account!')
     else:
         return Response("There is not a user with this username and password!")
     
