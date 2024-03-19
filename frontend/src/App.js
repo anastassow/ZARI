@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
 const LoginForm = ({ onSubmit }) => {
   const [username, setUsername] = useState('');
@@ -7,7 +8,8 @@ const LoginForm = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit('http://127.0.0.1:8000/authenticate/login/', { username, password });
+    const hashedPassword = CryptoJS.SHA256(password).toString();
+    onSubmit('http://127.0.0.1:8000/authenticate/login/', { username, password: hashedPassword});
   };
 
   return (
@@ -35,7 +37,8 @@ const RegisterForm = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit('http://127.0.0.1:8000/authenticate/register/', { username, password });
+    const hashedPassword = CryptoJS.SHA256(password).toString(); // Hash the password
+    onSubmit('http://127.0.0.1:8000/authenticate/register/', { username, password: hashedPassword});
   };
 
   return (

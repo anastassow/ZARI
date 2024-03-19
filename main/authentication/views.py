@@ -25,6 +25,7 @@ def login_view(request):
     user = authenticate(request=request, username = username, password = password)
     if user is not None:
         login(request, user)
+        print(password)
         return Response("Hello, {username} you have loged into your account!")
     else:
         return Response("There is not a user with this username and password!")
