@@ -64,12 +64,21 @@ const App = () => {
       .catch(error => console.error(error));
   };
 
+  const logout = () => {
+    axios.post('http://127.0.0.1:8000/authenticate/logout/')
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => console.error(error));
+  };
+
   return (
     <div>
       <h1>Login</h1>
       <LoginForm onSubmit={handleSubmit} />
       <h1>Register</h1>
       <RegisterForm onSubmit={handleSubmit} />
+      <button onClick={logout}>Logout</button>
     </div>
   );
 };
