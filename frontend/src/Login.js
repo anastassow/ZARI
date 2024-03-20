@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import CryptoJS from 'crypto-js';
+import axios from 'axios';
 
-const LoginForm = ({ onSubmit, logout }) => {
+const LoginForm = ({ logout }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
   
     const handleSubmit = (e) => {
       e.preventDefault();
       const hashedPassword = CryptoJS.SHA256(password).toString();
-      onSubmit('http://127.0.0.1:8000/authenticate/login/', { username, password: hashedPassword});
+      axios.post('http://127.0.0.1:8000/authenticate/login/', { username, password: hashedPassword});
     };
   
     return (
