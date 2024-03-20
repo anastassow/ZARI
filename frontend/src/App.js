@@ -1,64 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
-import CryptoJS from 'crypto-js';
-
-const LoginForm = ({ onSubmit }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const hashedPassword = CryptoJS.SHA256(password).toString();
-    onSubmit('http://127.0.0.1:8000/authenticate/login/', { username, password: hashedPassword});
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input 
-        type="text" 
-        placeholder="Username" 
-        value={username} 
-        onChange={(e) => setUsername(e.target.value)} 
-      />
-      <input 
-        type="password" 
-        placeholder="Password" 
-        value={password} 
-        onChange={(e) => setPassword(e.target.value)} 
-      />
-      <button type="submit">Login</button>
-    </form>
-  );
-};
-
-const RegisterForm = ({ onSubmit }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const hashedPassword = CryptoJS.SHA256(password).toString(); // Hash the password
-    onSubmit('http://127.0.0.1:8000/authenticate/register/', { username, password: hashedPassword});
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input 
-        type="text" 
-        placeholder="Username" 
-        value={username} 
-        onChange={(e) => setUsername(e.target.value)} 
-      />
-      <input 
-        type="password" 
-        placeholder="Password" 
-        value={password} 
-        onChange={(e) => setPassword(e.target.value)} 
-      />
-      <button type="submit">Register</button>
-    </form>
-  );
-};
+import RegisterForm from './Register';
+import LoginForm from './Login'
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 const App = () => {
   const handleSubmit = (url, data) => {
@@ -77,11 +21,12 @@ const App = () => {
 
   return (
     <div>
-      <h1>Login</h1>
-      <LoginForm onSubmit={handleSubmit} />
-      <h1>Register</h1>
-      <RegisterForm onSubmit={handleSubmit} />
-      <button onClick={logout}>Logout</button>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/register' element={<RegisterForm/>}/>
+          <Route path='/login' element={<LoginForm/>}/>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 };
