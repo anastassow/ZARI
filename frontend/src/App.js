@@ -3,6 +3,7 @@ import axios from 'axios';
 import RegisterForm from './Register';
 import LoginForm from './Login'
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import Home from './Home';
 
 const App = () => {
   const handleSubmit = (url, data) => {
@@ -25,6 +26,7 @@ const App = () => {
         <Routes>
           <Route path='/register' element={<RegisterForm/>}/>
           <Route path='/login' element={<LoginForm logout={logout}/>}/>
+          <Route path="/home" component={Home} />
         </Routes>
       </BrowserRouter>
     </div>
