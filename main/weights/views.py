@@ -13,8 +13,6 @@ def create_exercise(request):
 
 @api_view(['POST'])
 def add_weight_with_reps(request):
-    weight_value = request.data.get('weight')
-    reps_value = request.data.get('reps')
     exercise_name = request.data.get('name')
 
     try:
@@ -22,8 +20,19 @@ def add_weight_with_reps(request):
     except Exercise.DoesNotExist:
         return Response("Exercise with the provided name does not exist", status=status.HTTP_404_NOT_FOUND)
 
-    reps = Reps.objects.create(value=reps_value)
+    weights_data = request.data.get('weights')  # Assuming weights are passed as a list of dictionaries
 
-    Weight.objects.create(value=weight_value, reps=reps, exercise=exercise)
+    if not weights_data:
+        return Response("No weights provided", status=status.HTTP_400_BAD_REQUEST)
 
-    return Response("Weight added to exercise with reps!", status=status.HTTP_201_CREATED)
+    for weight_data in weights_data:
+        weight_value = weight_data.get('weight')
+        reps_value = weight_data.get('reps')
+
+        reps = Reps.objects.create(value=reps_value)
+        weight = Weight.objects.create(value=weight_value, reps=reps)
+
+        exercise.weights.add(weight)  # Associate weight with exercise
+
+    return Response("Weights added to exercise with reps!", status=status.HTTP_201_CREATED)
+

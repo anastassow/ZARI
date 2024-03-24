@@ -26,7 +26,7 @@ const App = () => {
         <Routes>
           <Route path='/register' element={<RegisterForm/>}/>
           <Route path='/login' element={<LoginForm logout={logout}/>}/>
-          <Route path="/home" component={Home} />
+          <Route path="/home" element={<Home/>} />
         </Routes>
       </BrowserRouter>
     </div>
