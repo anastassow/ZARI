@@ -40,8 +40,6 @@ def add_weight_with_reps(request):
         return Response("Invalid weight data", status=status.HTTP_400_BAD_REQUEST)
 
     exercise.weights.add(weight)
-    print(exercise.name)
-    print(exercise.weights.all())
 
     return Response("Weight added to exercise with reps!", status=status.HTTP_201_CREATED)
 
