@@ -1,36 +1,29 @@
 from rest_framework import status
-from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
-from .models import Exersize, Weight
 from rest_framework.response import Response
+from .models import Exercise, Weight, Reps
 
 @api_view(['POST'])
-def exersizeHandle(request):
-    exersize_name = request.data.get('name')
+def create_exercise(request):
+    exercise_name = request.data.get('name')
 
-    weight = Weight.objects.create()
+    Exercise.objects.create(name=exercise_name)
 
-    exersize = Exersize.objects.create(name=exersize_name, weight=weight)
-
-    return Response("Exersize added!", status=status.HTTP_201_CREATED)
+    return Response("Exercise created!", status=status.HTTP_201_CREATED)
 
 @api_view(['POST'])
-def addWeight(request):
+def add_weight_with_reps(request):
     weight_value = request.data.get('weight')
-    exersize_name = request.data.get('name')
+    reps_value = request.data.get('reps')
+    exercise_name = request.data.get('name')
 
     try:
-        exersize = Exersize.objects.get(name=exersize_name)
-    except Exersize.DoesNotExist:
-        return Response("Exersize with the provided name does not exist", status=404)
+        exercise = Exercise.objects.get(name=exercise_name)
+    except Exercise.DoesNotExist:
+        return Response("Exercise with the provided name does not exist", status=status.HTTP_404_NOT_FOUND)
 
-    try:
-        weight = Weight.objects.get(value=weight_value)
-    except Weight.DoesNotExist:
-        weight = Weight.objects.create(value=weight_value)
+    reps = Reps.objects.create(value=reps_value)
 
-    exersize.weight = weight
-    exersize.save()
+    Weight.objects.create(value=weight_value, reps=reps, exercise=exercise)
 
-    return Response("The weight is added!")
-
+    return Response("Weight added to exercise with reps!", status=status.HTTP_201_CREATED)

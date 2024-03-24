@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import exersizeHandle, addWeight
+from .views import create_exercise, add_weight_with_reps
 
 urlpatterns = [
-    path('exersize/', exersizeHandle, name = 'exersize'),
-    path('addWeight/', addWeight, name = 'addWeight'),
+    path('exercise/', create_exercise, name = 'exercise'),
+    path('weight/', add_weight_with_reps, name = 'weight'),
 ]
