@@ -19,20 +19,30 @@ def add_weight_with_reps(request):
         exercise = Exercise.objects.get(name=exercise_name)
     except Exercise.DoesNotExist:
         return Response("Exercise with the provided name does not exist", status=status.HTTP_404_NOT_FOUND)
+    
+    weight_data = request.data.get('weight')
+    reps_data = request.data.get('reps')
 
-    weights_data = request.data.get('weights')  # Assuming weights are passed as a list of dictionaries
+    if reps_data is None:
+        return Response("Reps data is missing", status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        reps = Reps.objects.create(value=reps_data)
+    except (ValueError, TypeError):
+        return Response("Invalid reps data", status=status.HTTP_400_BAD_REQUEST)
 
-    if not weights_data:
-        return Response("No weights provided", status=status.HTTP_400_BAD_REQUEST)
+    if weight_data is None:
+        return Response("Weight data is missing", status=status.HTTP_400_BAD_REQUEST)
 
-    for weight_data in weights_data:
-        weight_value = weight_data.get('weight')
-        reps_value = weight_data.get('reps')
+    try:
+        weight = Weight.objects.create(value=weight_data, reps=reps)
+    except (ValueError, TypeError):
+        return Response("Invalid weight data", status=status.HTTP_400_BAD_REQUEST)
 
-        reps = Reps.objects.create(value=reps_value)
-        weight = Weight.objects.create(value=weight_value, reps=reps)
+    exercise.weights.add(weight)
+    print(exercise.name)
+    print(exercise.weights.all())
 
-        exercise.weights.add(weight)  # Associate weight with exercise
+    return Response("Weight added to exercise with reps!", status=status.HTTP_201_CREATED)
 
-    return Response("Weights added to exercise with reps!", status=status.HTTP_201_CREATED)
 

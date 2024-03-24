@@ -1,4 +1,3 @@
-// Home.js
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -35,7 +34,8 @@ const Home = () => {
     try {
       await axios.post('http://127.0.0.1:8000/weights/weight/', {
         name: exerciseName,
-        weights: [{ weight, reps }]
+        weight: parseFloat(weight),
+        reps: parseInt(reps)
       });
       alert('Weight added successfully!');
       setWeight('');
