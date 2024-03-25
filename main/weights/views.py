@@ -45,7 +45,6 @@ def add_weight_with_reps(request):
 
 @api_view(['POST'])
 def test(request):
-    # Assuming you're passing the exercise name in the request data
     exercise_name = request.data.get('exercise_name')
 
     try:
