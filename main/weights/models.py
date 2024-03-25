@@ -10,3 +10,4 @@ class Weight(models.Model):
 class Exercise(models.Model):
     name = models.TextField(max_length=100)
     weights = models.ManyToManyField(Weight, related_name='exercises')
+    username = models.TextField(max_length = 100, default = 'none', null=True, blank=True)
