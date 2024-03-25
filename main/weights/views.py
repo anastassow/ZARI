@@ -42,17 +42,3 @@ def add_weight_with_reps(request):
     exercise.weights.add(weight)
 
     return Response("Weight added to exercise with reps!", status=status.HTTP_201_CREATED)
-
-@api_view(['POST'])
-def test(request):
-    exercise_name = request.data.get('exercise_name')
-
-    try:
-        exercise = Exercise.objects.get(name=exercise_name)
-    except Exercise.DoesNotExist:
-        return Response("Exercise not found", status=status.HTTP_404_NOT_FOUND)
-    
-    if exercise.username == 'none':
-        return Response("User is None", status=status.HTTP_200_OK)
-    else:
-        return Response("User is not None", status=status.HTTP_200_OK)
