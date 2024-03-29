@@ -6,8 +6,8 @@ from .models import Exercise, Weight, Reps
 @api_view(['POST'])
 def create_exercise(request):
     exercise_name = request.data.get('name')
-
-    Exercise.objects.create(name=exercise_name)
+    
+    Exercise.objects.create(name=exercise_name, user = 2)
 
     return Response("Exercise created!", status=status.HTTP_201_CREATED)
 

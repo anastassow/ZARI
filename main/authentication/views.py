@@ -15,20 +15,21 @@ def register(request,):
         return Response("Username allready exists!")
     else:
         new_user = User.objects.create(username=username, password=make_password(password))
-        print(password)
+        #print("This is the id:")
+        #print(new_user.id)
         return Response("You have created a new account!")
     
 @api_view(['POST'])
 def login_view(request):
     username = request.data.get('username')
     password = request.data.get('password')
-    user = authenticate(request=request, username = username, password = password)
+    user = authenticate(request=request, username=username, password=password)
     if user is not None:
         login(request, user)
-        print(password)
-        return Response(f'Hello, {username} you have loged into your account!')
+        user_id = user.id 
+        return Response({'message': f'Hello, {username}, you have logged into your account!', 'user_id': user_id})
     else:
-        return Response("There is not a user with this username and password!")
+        return Response({"error": "There is no user with this username and password!"})
     
 @api_view(['POST'])
 def logout_view(request):

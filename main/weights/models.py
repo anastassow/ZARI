@@ -1,4 +1,5 @@
 from django.db import models
+from authentication.models import User
 
 class Reps(models.Model):
     value = models.PositiveIntegerField(default=0) 
@@ -10,3 +11,4 @@ class Weight(models.Model):
 class Exercise(models.Model):
     name = models.TextField(max_length=100)
     weights = models.ManyToManyField(Weight, related_name='exercises')
+    user = models.ForeignKey(User, on_delete = models.CASCADE, default = None, null = False)
