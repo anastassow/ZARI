@@ -44,3 +44,26 @@ def add_weight_with_reps(request):
     exercise.weights.add(weight)
 
     return Response("Weight added to exercise with reps!", status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def get_user_exercise_data(request):
+    user_id = request.data.get('user_id')
+    exercises = Exercise.objects.filter(user_id=user_id)
+    formatted_data = []
+
+    for exercise in exercises:
+        exercise_data = {
+            'id': exercise.id,
+            'name': exercise.name,
+            'weights': []
+        }
+        for weight in exercise.weights.all():
+            weight_data = {
+                'id': weight.id,
+                'value': weight.value,
+                'reps': weight.reps.value
+            }
+            exercise_data['weights'].append(weight_data)
+        formatted_data.append(exercise_data)
+
+    return Response(formatted_data)
