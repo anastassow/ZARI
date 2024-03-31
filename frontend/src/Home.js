@@ -21,7 +21,8 @@ const Home = () => {
   const handleExerciseSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://127.0.0.1:8000/weights/exercise/', { name: exerciseName });
+      const user_id = localStorage.getItem('user_id'); // Get user_id from local storage
+      await axios.post('http://127.0.0.1:8000/weights/exercise/', { name: exerciseName, user_id });
       alert('Exercise created successfully!');
       setExerciseName('');
     } catch (error) {
@@ -32,10 +33,12 @@ const Home = () => {
   const handleWeightSubmit = async (e) => {
     e.preventDefault();
     try {
+      const user_id = localStorage.getItem('user_id'); // Get user_id from local storage
       await axios.post('http://127.0.0.1:8000/weights/weight/', {
         name: exerciseName,
         weight: parseFloat(weight),
-        reps: parseInt(reps)
+        reps: parseInt(reps),
+        user_id
       });
       alert('Weight added successfully!');
       setWeight('');
