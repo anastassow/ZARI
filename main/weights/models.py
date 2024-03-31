@@ -11,4 +11,4 @@ class Weight(models.Model):
 class Exercise(models.Model):
     name = models.TextField(max_length=100)
     weights = models.ManyToManyField(Weight, related_name='exercises')
-    user = models.ForeignKey(User, on_delete = models.CASCADE, default = None, null = False)
+    user_id = models.IntegerField(default = 0)

@@ -9,13 +9,7 @@ def create_exercise(request):
     exercise_name = request.data.get('name')
     user_id = request.data.get('user_id')
 
-    try:
-        user_id = int(user_id)
-        user = User.objects.get(us_id = user_id)
-    except:
-        return Response("Error with the User object")
-
-    Exercise.objects.create(name=exercise_name, user = user)
+    Exercise.objects.create(name=exercise_name, user_id = user_id)
 
     return Response("Exercise created!", status=status.HTTP_201_CREATED)
 
