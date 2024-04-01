@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Home = () => {
   const [exerciseName, setExerciseName] = useState('');
   const [weight, setWeight] = useState('');
   const [reps, setReps] = useState('');
+  const [exerciseData, setExerciseData] = useState([]);
+
+  useEffect(() => {
+    fetchExerciseData();
+  }, []);
+
+  const fetchExerciseData = async () => {
+    try {
+      const user_id = localStorage.getItem('user_id'); // Get user_id from local storage
+      const response = await axios.post('http://127.0.0.1:8000/weights/get_user_exercise_data/', { user_id });
+      setExerciseData(response.data);
+    } catch (error) {
+      console.error('Error fetching exercise data:', error);
+    }
+  };
 
   const handleExerciseChange = (e) => {
     setExerciseName(e.target.value);
@@ -43,6 +58,7 @@ const Home = () => {
       alert('Weight added successfully!');
       setWeight('');
       setReps('');
+      fetchExerciseData();
     } catch (error) {
       console.error('Error adding weight:', error);
     }
@@ -82,6 +98,32 @@ const Home = () => {
         />
         <button type="submit">Add Weight</button>
       </form>
+
+      <h2>All Exercise Data</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Exercise Name</th>
+            <th>Weights</th>
+          </tr>
+        </thead>
+        <tbody>
+          {exerciseData.map(exercise => (
+            <tr key={exercise.id}>
+              <td>{exercise.name}</td>
+              <td>
+                <ul>
+                  {exercise.weights.map(weight => (
+                    <li key={weight.id}>
+                      Weight: {weight.value}, Reps: {weight.reps}
+                    </li>
+                  ))}
+                </ul>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
