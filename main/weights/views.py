@@ -67,3 +67,19 @@ def get_user_exercise_data(request):
         formatted_data.append(exercise_data)
 
     return Response(formatted_data)
+
+@api_view(['POST'])
+def deleteExercise(request):
+    name = request.data.get('name')
+    
+    try:
+        exercise = Exercise.objects.get(name=name)
+        # Delete all weights related to the exercise
+        exercise.weights.all().delete()
+        # Delete the exercise itself
+        exercise.delete()
+        return Response("Success!", status=status.HTTP_200_OK)
+    except Exercise.DoesNotExist:
+        return Response("Exercise does not exist!", status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response("An error occurred while deleting the exercise: {}".format(str(e)), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
